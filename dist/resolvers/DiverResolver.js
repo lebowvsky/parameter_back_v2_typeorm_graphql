@@ -1,4 +1,16 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,32 +51,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-var express_1 = __importDefault(require("express"));
-var apollo_server_express_1 = require("apollo-server-express");
-var typeorm_1 = require("typeorm");
 var type_graphql_1 = require("type-graphql");
-var DiverResolver_1 = __importDefault(require("./resolvers/DiverResolver"));
-var main = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var schema, server, app;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.createConnection()];
-            case 1:
-                _a.sent();
-                return [4 /*yield*/, type_graphql_1.buildSchema({ resolvers: [
-                            DiverResolver_1.default
-                        ] })];
-            case 2:
-                schema = _a.sent();
-                server = new apollo_server_express_1.ApolloServer({ schema: schema });
-                app = express_1.default();
-                server.applyMiddleware({ app: app });
-                app.listen({ port: 4000 }, function () {
-                    return console.log("Server ready at http://localhost:4000" + server.graphqlPath);
-                });
-                return [2 /*return*/];
-        }
-    });
-}); };
-main();
+var CreateDiverInput_1 = __importDefault(require("../inputs/CreateDiverInput"));
+var Diver_1 = require("../models/Diver");
+var DiverResolver = /** @class */ (function () {
+    function DiverResolver() {
+    }
+    DiverResolver.prototype.divers = function () {
+        return Diver_1.Diver.find();
+    };
+    DiverResolver.prototype.createDiver = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            var diver;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        diver = Diver_1.Diver.create(data);
+                        return [4 /*yield*/, diver.save()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, diver];
+                }
+            });
+        });
+    };
+    __decorate([
+        type_graphql_1.Query(function () { return [Diver_1.Diver]; }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DiverResolver.prototype, "divers", null);
+    __decorate([
+        type_graphql_1.Mutation(function () { return Diver_1.Diver; }),
+        __param(0, type_graphql_1.Arg('data')),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [CreateDiverInput_1.default]),
+        __metadata("design:returntype", Promise)
+    ], DiverResolver.prototype, "createDiver", null);
+    DiverResolver = __decorate([
+        type_graphql_1.Resolver()
+    ], DiverResolver);
+    return DiverResolver;
+}());
+exports.default = DiverResolver;

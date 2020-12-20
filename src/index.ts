@@ -2,24 +2,19 @@ import "reflect-metadata";
 import express from "express";
 import { ApolloServer, gql } from "apollo-server-express";
 import { createConnection } from "typeorm";
+import { buildSchema } from "type-graphql";
 
-// construct a schema, using graphql language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+import DiverResolver from "./resolvers/DiverResolver";
 
-// Provide resolvers functions for schema fields
-const resolvers = {
-  Query: {
-    hello: () => "Hello world",
-  },
-};
+
 
 const main = async () => {
   await createConnection();
-  const server = new ApolloServer({ typeDefs, resolvers });
+
+  const schema = await buildSchema({resolvers: [
+    DiverResolver
+  ]})
+  const server = new ApolloServer({ schema });
 
   const app = express();
   server.applyMiddleware({ app });
