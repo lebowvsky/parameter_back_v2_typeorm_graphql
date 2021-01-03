@@ -1,5 +1,7 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
+
+import { Dive } from "./Dive";
 
 @Entity()
 @ObjectType()
@@ -19,4 +21,8 @@ export class Diver extends BaseEntity {
   @Column()
   @Field(() => String)
   date_birthday?: string;
+
+  @ManyToMany(type => Dive, dive => dive.divers, {lazy: true})
+  @Field(type => [Dive])
+  dives: Promise<Dive[]>
 }

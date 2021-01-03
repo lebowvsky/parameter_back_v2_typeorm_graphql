@@ -22,44 +22,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Diver = void 0;
+exports.Dive = void 0;
 var typeorm_1 = require("typeorm");
 var type_graphql_1 = require("type-graphql");
-var Dive_1 = require("./Dive");
-var Diver = /** @class */ (function (_super) {
-    __extends(Diver, _super);
-    function Diver() {
+var Diver_1 = require("./Diver");
+var Dive = /** @class */ (function (_super) {
+    __extends(Dive, _super);
+    function Dive() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         type_graphql_1.Field(function () { return type_graphql_1.ID; }),
         __metadata("design:type", String)
-    ], Diver.prototype, "id", void 0);
+    ], Dive.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column(),
-        type_graphql_1.Field(function () { return String; }),
+        type_graphql_1.Field(function (type) { return String; }),
         __metadata("design:type", String)
-    ], Diver.prototype, "firstname", void 0);
+    ], Dive.prototype, "place", void 0);
     __decorate([
         typeorm_1.Column(),
-        type_graphql_1.Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], Diver.prototype, "lastname", void 0);
+        type_graphql_1.Field(function (type) { return Number; }),
+        __metadata("design:type", Number)
+    ], Dive.prototype, "depth", void 0);
     __decorate([
         typeorm_1.Column(),
-        type_graphql_1.Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], Diver.prototype, "date_birthday", void 0);
+        type_graphql_1.Field(function (type) { return Number; }),
+        __metadata("design:type", Number)
+    ], Dive.prototype, "duration", void 0);
     __decorate([
-        typeorm_1.ManyToMany(function (type) { return Dive_1.Dive; }, function (dive) { return dive.divers; }, { lazy: true }),
-        type_graphql_1.Field(function (type) { return [Dive_1.Dive]; }),
+        typeorm_1.Column(),
+        type_graphql_1.Field(function (type) { return String; }),
+        __metadata("design:type", String)
+    ], Dive.prototype, "gps", void 0);
+    __decorate([
+        typeorm_1.Column(),
+        type_graphql_1.Field(function (type) { return String; }),
+        __metadata("design:type", String)
+    ], Dive.prototype, "gasMix", void 0);
+    __decorate([
+        typeorm_1.ManyToMany(function (type) { return Diver_1.Diver; }, function (diver) { return diver.dives; }, { lazy: true }),
+        typeorm_1.JoinTable({
+            name: "dive_diver",
+            joinColumn: {
+                name: "diveId",
+                referencedColumnName: "id"
+            },
+            inverseJoinColumn: {
+                name: "diverId",
+                referencedColumnName: "id"
+            }
+        }),
+        type_graphql_1.Field(function (type) { return [Diver_1.Diver]; }),
         __metadata("design:type", Promise)
-    ], Diver.prototype, "dives", void 0);
-    Diver = __decorate([
+    ], Dive.prototype, "divers", void 0);
+    Dive = __decorate([
         typeorm_1.Entity(),
         type_graphql_1.ObjectType()
-    ], Diver);
-    return Diver;
+    ], Dive);
+    return Dive;
 }(typeorm_1.BaseEntity));
-exports.Diver = Diver;
+exports.Dive = Dive;

@@ -5,6 +5,7 @@ import { createConnection } from "typeorm";
 import { buildSchema } from "type-graphql";
 
 import DiverResolver from "./resolvers/DiverResolver";
+import DiveResolver from "./resolvers/DiveResolvers";
 
 
 
@@ -12,7 +13,8 @@ const main = async () => {
   await createConnection();
 
   const schema = await buildSchema({resolvers: [
-    DiverResolver
+    DiverResolver,
+    DiveResolver
   ]})
   const server = new ApolloServer({ schema });
 

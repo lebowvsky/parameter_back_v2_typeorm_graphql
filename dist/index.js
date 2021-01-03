@@ -45,6 +45,7 @@ var apollo_server_express_1 = require("apollo-server-express");
 var typeorm_1 = require("typeorm");
 var type_graphql_1 = require("type-graphql");
 var DiverResolver_1 = __importDefault(require("./resolvers/DiverResolver"));
+var DiveResolvers_1 = __importDefault(require("./resolvers/DiveResolvers"));
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var schema, server, app;
     return __generator(this, function (_a) {
@@ -53,7 +54,8 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 1:
                 _a.sent();
                 return [4 /*yield*/, type_graphql_1.buildSchema({ resolvers: [
-                            DiverResolver_1.default
+                            DiverResolver_1.default,
+                            DiveResolvers_1.default
                         ] })];
             case 2:
                 schema = _a.sent();
