@@ -62,8 +62,8 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 server = new apollo_server_express_1.ApolloServer({ schema: schema });
                 app = express_1.default();
                 server.applyMiddleware({ app: app });
-                app.listen({ port: 4000 }, function () {
-                    return console.log("Server ready at http://localhost:4000" + server.graphqlPath);
+                app.listen({ port: 5000 }, function () {
+                    return console.log("Server ready at http://localhost:5000" + server.graphqlPath);
                 });
                 return [2 /*return*/];
         }
