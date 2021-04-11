@@ -1,13 +1,13 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export default class CreateDiverInput {
+export class CreateDiverInput {
   @Field()
-  firstname!: string;
+  height!: number;
 
   @Field()
-  lastname!: string;
+  weight!: number;
 
-  @Field({ nullable: true })
-  date_birthday?: string;
+  @Field()
+  date_birthday?: Date;
 }

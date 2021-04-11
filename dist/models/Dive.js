@@ -21,18 +21,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Dive = void 0;
 var typeorm_1 = require("typeorm");
 var type_graphql_1 = require("type-graphql");
-var Diver_1 = require("./Diver");
+var Diver_1 = __importDefault(require("./Diver"));
 var Dive = /** @class */ (function (_super) {
     __extends(Dive, _super);
     function Dive() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
-        typeorm_1.PrimaryGeneratedColumn(),
+        typeorm_1.PrimaryGeneratedColumn("uuid"),
         type_graphql_1.Field(function () { return type_graphql_1.ID; }),
         __metadata("design:type", String)
     ], Dive.prototype, "id", void 0);
@@ -62,7 +64,7 @@ var Dive = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], Dive.prototype, "gasMix", void 0);
     __decorate([
-        typeorm_1.ManyToMany(function (type) { return Diver_1.Diver; }, function (diver) { return diver.dives; }, { lazy: true }),
+        typeorm_1.ManyToMany(function (type) { return Diver_1.default; }, function (diver) { return diver.dives; }, { lazy: true }),
         typeorm_1.JoinTable({
             name: "dive_diver",
             joinColumn: {
@@ -74,7 +76,7 @@ var Dive = /** @class */ (function (_super) {
                 referencedColumnName: "id"
             }
         }),
-        type_graphql_1.Field(function (type) { return [Diver_1.Diver]; }),
+        type_graphql_1.Field(function (type) { return [Diver_1.default]; }),
         __metadata("design:type", Promise)
     ], Dive.prototype, "divers", void 0);
     Dive = __decorate([
@@ -83,4 +85,4 @@ var Dive = /** @class */ (function (_super) {
     ], Dive);
     return Dive;
 }(typeorm_1.BaseEntity));
-exports.Dive = Dive;
+exports.default = Dive;

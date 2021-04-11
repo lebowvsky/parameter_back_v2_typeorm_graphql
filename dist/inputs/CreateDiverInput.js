@@ -9,25 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateDiverInput = void 0;
 var type_graphql_1 = require("type-graphql");
 var CreateDiverInput = /** @class */ (function () {
     function CreateDiverInput() {
     }
     __decorate([
         type_graphql_1.Field(),
-        __metadata("design:type", String)
-    ], CreateDiverInput.prototype, "firstname", void 0);
+        __metadata("design:type", Number)
+    ], CreateDiverInput.prototype, "height", void 0);
     __decorate([
         type_graphql_1.Field(),
-        __metadata("design:type", String)
-    ], CreateDiverInput.prototype, "lastname", void 0);
+        __metadata("design:type", Number)
+    ], CreateDiverInput.prototype, "weight", void 0);
     __decorate([
-        type_graphql_1.Field({ nullable: true }),
-        __metadata("design:type", String)
+        type_graphql_1.Field(),
+        __metadata("design:type", Date)
     ], CreateDiverInput.prototype, "date_birthday", void 0);
     CreateDiverInput = __decorate([
         type_graphql_1.InputType()
     ], CreateDiverInput);
     return CreateDiverInput;
 }());
-exports.default = CreateDiverInput;
+exports.CreateDiverInput = CreateDiverInput;
