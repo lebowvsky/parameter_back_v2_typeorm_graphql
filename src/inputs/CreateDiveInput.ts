@@ -1,5 +1,5 @@
 import { Field, InputType } from "type-graphql";
-import { Diver } from "../models/Diver";
+import Diver from "../models/Diver";
 
 @InputType()
 export default class CreateDiveInput {

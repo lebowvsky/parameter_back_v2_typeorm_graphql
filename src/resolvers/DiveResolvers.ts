@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
 import CreateDiveInput from "../inputs/CreateDiveInput";
 import DiverInput from "../inputs/DiverInput";
-import { Dive } from "../models/Dive";
-import { Diver } from "../models/Diver";
+import Dive from "../models/Dive";
+import Diver from "../models/Diver";
 
 @Resolver()
 export default class DiveResolver {
@@ -13,17 +13,20 @@ export default class DiveResolver {
 
   @Mutation(() => Dive)
   async createDive(
-    @Arg('dive') input: CreateDiveInput,
+    @Arg('data') data: CreateDiveInput,
     @Arg('divers', type => [DiverInput]) divers: Diver[]
     ): Promise<Dive> {
-    const dive = new Dive();
-    dive.place = input.place;
-    dive.depth = input.depth;
-    dive.duration = input.duration;
-    dive.gps = input.gps;
-    dive.gasMix = input.gasMix;
+    const dive = Dive.create(data);
     dive.divers = Promise.resolve(divers);
     await dive.save();
     return dive;
+  }
+  
+  @Mutation(() => String)
+  async deleteDiveById(@Arg('id') id: string): Promise<String> {
+    const dive = await Dive.findOne(id);
+    if (!dive) throw new Error("No dive with this id...");
+    await Dive.delete(id);
+    return `${dive.place} Dive deleted...`;
   }
 }

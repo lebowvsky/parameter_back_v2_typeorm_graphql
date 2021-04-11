@@ -1,28 +1,45 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
-import { Dive } from "./Dive";
+import AppUser from "./AppUser";
+import Dive from "./Dive";
 
 @Entity()
 @ObjectType()
-export class Diver extends BaseEntity {
-  @PrimaryGeneratedColumn()
+export default class Diver extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
   @Field(() => ID)
   id!: string;
 
   @Column()
-  @Field(() => String)
-  firstname!: string;
+  @Field(() => Number)
+  height!: number;
 
   @Column()
   @Field(() => String)
-  lastname!: string;
+  weight!: number;
 
   @Column()
-  @Field(() => String)
-  date_birthday?: string;
+  @Field(() => Date)
+  date_birthday?: Date;
 
-  @ManyToMany(type => Dive, dive => dive.divers, {lazy: true})
-  @Field(type => [Dive])
-  dives: Promise<Dive[]>
+  @OneToOne((type) => AppUser, (appUser) => appUser.diver, {
+    lazy: true,
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
+  @Field((type) => AppUser, { nullable: true })
+  appUser: AppUser;
+
+  @ManyToMany((type) => Dive, (dive) => dive.divers, { lazy: true })
+  @Field((type) => [Dive])
+  dives: Promise<Dive[]>;
 }

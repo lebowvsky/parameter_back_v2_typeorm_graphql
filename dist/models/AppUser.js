@@ -27,51 +27,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var type_graphql_1 = require("type-graphql");
-var AppUser_1 = __importDefault(require("./AppUser"));
-var Dive_1 = __importDefault(require("./Dive"));
-var Diver = /** @class */ (function (_super) {
-    __extends(Diver, _super);
-    function Diver() {
+var Diver_1 = __importDefault(require("./Diver"));
+var AppUser = /** @class */ (function (_super) {
+    __extends(AppUser, _super);
+    function AppUser() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn("uuid"),
         type_graphql_1.Field(function () { return type_graphql_1.ID; }),
         __metadata("design:type", String)
-    ], Diver.prototype, "id", void 0);
+    ], AppUser.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column(),
-        type_graphql_1.Field(function () { return Number; }),
-        __metadata("design:type", Number)
-    ], Diver.prototype, "height", void 0);
+        type_graphql_1.Field(),
+        __metadata("design:type", String)
+    ], AppUser.prototype, "firstname", void 0);
     __decorate([
         typeorm_1.Column(),
-        type_graphql_1.Field(function () { return String; }),
-        __metadata("design:type", Number)
-    ], Diver.prototype, "weight", void 0);
+        type_graphql_1.Field(),
+        __metadata("design:type", String)
+    ], AppUser.prototype, "lastname", void 0);
     __decorate([
         typeorm_1.Column(),
-        type_graphql_1.Field(function () { return Date; }),
-        __metadata("design:type", Date)
-    ], Diver.prototype, "date_birthday", void 0);
+        type_graphql_1.Field(),
+        __metadata("design:type", String)
+    ], AppUser.prototype, "email", void 0);
     __decorate([
-        typeorm_1.OneToOne(function (type) { return AppUser_1.default; }, function (appUser) { return appUser.diver; }, {
+        typeorm_1.Column(),
+        type_graphql_1.Field(),
+        __metadata("design:type", String)
+    ], AppUser.prototype, "password", void 0);
+    __decorate([
+        typeorm_1.OneToOne(function (type) { return Diver_1.default; }, function (diver) { return diver.appUser; }, {
             lazy: true,
-            onDelete: "CASCADE",
+            cascade: true,
         }),
-        typeorm_1.JoinColumn(),
-        type_graphql_1.Field(function (type) { return AppUser_1.default; }, { nullable: true }),
-        __metadata("design:type", AppUser_1.default)
-    ], Diver.prototype, "appUser", void 0);
-    __decorate([
-        typeorm_1.ManyToMany(function (type) { return Dive_1.default; }, function (dive) { return dive.divers; }, { lazy: true }),
-        type_graphql_1.Field(function (type) { return [Dive_1.default]; }),
-        __metadata("design:type", Promise)
-    ], Diver.prototype, "dives", void 0);
-    Diver = __decorate([
+        type_graphql_1.Field(),
+        __metadata("design:type", Diver_1.default)
+    ], AppUser.prototype, "diver", void 0);
+    AppUser = __decorate([
         typeorm_1.Entity(),
         type_graphql_1.ObjectType()
-    ], Diver);
-    return Diver;
+    ], AppUser);
+    return AppUser;
 }(typeorm_1.BaseEntity));
-exports.default = Diver;
+exports.default = AppUser;

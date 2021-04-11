@@ -51,73 +51,128 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var bcrypt_1 = require("bcrypt");
 var type_graphql_1 = require("type-graphql");
-var CreateDiverInput_1 = require("../inputs/CreateDiverInput");
+var AppUser_1 = __importDefault(require("../models/AppUser"));
 var Diver_1 = __importDefault(require("../models/Diver"));
-var DiverResolver = /** @class */ (function () {
-    function DiverResolver() {
+var AppUserInput_1 = require("../inputs/AppUserInput");
+var CreateDiverInput_1 = require("../inputs/CreateDiverInput");
+var AppUserResolver = /** @class */ (function () {
+    function AppUserResolver() {
     }
-    DiverResolver.prototype.divers = function () {
-        return Diver_1.default.find();
+    AppUserResolver.prototype.getUserById = function (id) {
+        return AppUser_1.default.findOne(id);
     };
-    DiverResolver.prototype.createDiver = function (data) {
+    AppUserResolver.prototype.getAllUsers = function () {
+        return AppUser_1.default.find();
+    };
+    AppUserResolver.prototype.createAppUser = function (data, diverData) {
         return __awaiter(this, void 0, void 0, function () {
-            var diver;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a, appUser, diver;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        diver = Diver_1.default.create(data);
-                        if (!diver)
-                            throw new Error("Impossible to create a new Diver");
-                        return [4 /*yield*/, diver.save()];
+                        _a = data;
+                        return [4 /*yield*/, bcrypt_1.hash(data.password, 10)];
                     case 1:
-                        _a.sent();
-                        return [2 /*return*/, diver];
+                        _a.password = _b.sent();
+                        appUser = AppUser_1.default.create(data);
+                        diver = Diver_1.default.create(diverData);
+                        if (!appUser)
+                            throw new Error("Impossible to create a new User...");
+                        appUser.diver = diver;
+                        return [4 /*yield*/, diver.save()];
+                    case 2:
+                        _b.sent();
+                        return [4 /*yield*/, appUser.save()];
+                    case 3:
+                        _b.sent();
+                        return [2 /*return*/, appUser];
                 }
             });
         });
     };
-    DiverResolver.prototype.deleteDiverById = function (id) {
+    AppUserResolver.prototype.updateAppUserById = function (id, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var diver;
+            var appUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, Diver_1.default.findOne(id)];
+                    case 0: return [4 /*yield*/, AppUser_1.default.findOne(id)];
                     case 1:
-                        diver = _a.sent();
-                        if (!diver)
-                            throw new Error("No diver with this id...");
-                        return [4 /*yield*/, Diver_1.default.remove(diver)];
+                        appUser = _a.sent();
+                        if (!appUser)
+                            throw new Error("No User with this id...");
+                        Object.assign(appUser, data);
+                        return [4 /*yield*/, appUser.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, "Diver deleted"];
+                        return [2 /*return*/, appUser];
+                }
+            });
+        });
+    };
+    AppUserResolver.prototype.deleteAppUserById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var appUser;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, AppUser_1.default.findOne(id)];
+                    case 1:
+                        appUser = _a.sent();
+                        if (!appUser)
+                            throw new Error("No User with this id...");
+                        // await AppUser.remove(appUser);
+                        // return appUser;
+                        return [4 /*yield*/, AppUser_1.default.delete(id)];
+                    case 2:
+                        // await AppUser.remove(appUser);
+                        // return appUser;
+                        _a.sent();
+                        return [2 /*return*/, "AppUser " + appUser.firstname + " " + appUser.lastname + " deleted..."];
                 }
             });
         });
     };
     __decorate([
-        type_graphql_1.Query(function () { return [Diver_1.default]; }),
+        type_graphql_1.Query(function () { return AppUser_1.default; }),
+        __param(0, type_graphql_1.Arg("id")),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [AppUserInput_1.GetAppUserByIdInput]),
+        __metadata("design:returntype", Promise)
+    ], AppUserResolver.prototype, "getUserById", null);
+    __decorate([
+        type_graphql_1.Query(function () { return [AppUser_1.default]; }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
-    ], DiverResolver.prototype, "divers", null);
+    ], AppUserResolver.prototype, "getAllUsers", null);
     __decorate([
-        type_graphql_1.Mutation(function () { return Diver_1.default; }),
+        type_graphql_1.Mutation(function () { return AppUser_1.default; }),
         __param(0, type_graphql_1.Arg("data")),
+        __param(1, type_graphql_1.Arg("diverData")),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [CreateDiverInput_1.CreateDiverInput]),
+        __metadata("design:paramtypes", [AppUserInput_1.CreateNewAppUserInput,
+            CreateDiverInput_1.CreateDiverInput]),
         __metadata("design:returntype", Promise)
-    ], DiverResolver.prototype, "createDiver", null);
+    ], AppUserResolver.prototype, "createAppUser", null);
+    __decorate([
+        type_graphql_1.Mutation(function () { return AppUser_1.default; }),
+        __param(0, type_graphql_1.Arg("id")),
+        __param(1, type_graphql_1.Arg("data")),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, AppUserInput_1.UpdateAppUserInput]),
+        __metadata("design:returntype", Promise)
+    ], AppUserResolver.prototype, "updateAppUserById", null);
     __decorate([
         type_graphql_1.Mutation(function () { return String; }),
         __param(0, type_graphql_1.Arg("id")),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String]),
         __metadata("design:returntype", Promise)
-    ], DiverResolver.prototype, "deleteDiverById", null);
-    DiverResolver = __decorate([
+    ], AppUserResolver.prototype, "deleteAppUserById", null);
+    AppUserResolver = __decorate([
         type_graphql_1.Resolver()
-    ], DiverResolver);
-    return DiverResolver;
+    ], AppUserResolver);
+    return AppUserResolver;
 }());
-exports.default = DiverResolver;
+exports.default = AppUserResolver;

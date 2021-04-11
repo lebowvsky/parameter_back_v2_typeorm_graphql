@@ -1,12 +1,12 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
-import { Diver } from "./Diver";
+import Diver from "./Diver";
 
 @Entity()
 @ObjectType()
-export class Dive extends BaseEntity {
-  @PrimaryGeneratedColumn()
+export default class Dive extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
   @Field(() => ID)
   id!: string;
 

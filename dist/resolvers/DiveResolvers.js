@@ -54,25 +54,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var type_graphql_1 = require("type-graphql");
 var CreateDiveInput_1 = __importDefault(require("../inputs/CreateDiveInput"));
 var DiverInput_1 = __importDefault(require("../inputs/DiverInput"));
-var Dive_1 = require("../models/Dive");
+var Dive_1 = __importDefault(require("../models/Dive"));
 var DiveResolver = /** @class */ (function () {
     function DiveResolver() {
     }
     DiveResolver.prototype.dives = function () {
-        return Dive_1.Dive.find();
+        return Dive_1.default.find();
     };
-    DiveResolver.prototype.createDive = function (input, divers) {
+    DiveResolver.prototype.createDive = function (data, divers) {
         return __awaiter(this, void 0, void 0, function () {
             var dive;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        dive = new Dive_1.Dive();
-                        dive.place = input.place;
-                        dive.depth = input.depth;
-                        dive.duration = input.duration;
-                        dive.gps = input.gps;
-                        dive.gasMix = input.gasMix;
+                        dive = Dive_1.default.create(data);
                         dive.divers = Promise.resolve(divers);
                         return [4 /*yield*/, dive.save()];
                     case 1:
@@ -82,20 +77,45 @@ var DiveResolver = /** @class */ (function () {
             });
         });
     };
+    DiveResolver.prototype.deleteDiveById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var dive;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Dive_1.default.findOne(id)];
+                    case 1:
+                        dive = _a.sent();
+                        if (!dive)
+                            throw new Error("No dive with this id...");
+                        return [4 /*yield*/, Dive_1.default.delete(id)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, dive.place + " Dive deleted..."];
+                }
+            });
+        });
+    };
     __decorate([
-        type_graphql_1.Query(function () { return [Dive_1.Dive]; }),
+        type_graphql_1.Query(function () { return [Dive_1.default]; }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], DiveResolver.prototype, "dives", null);
     __decorate([
-        type_graphql_1.Mutation(function () { return Dive_1.Dive; }),
-        __param(0, type_graphql_1.Arg('dive')),
+        type_graphql_1.Mutation(function () { return Dive_1.default; }),
+        __param(0, type_graphql_1.Arg('data')),
         __param(1, type_graphql_1.Arg('divers', function (type) { return [DiverInput_1.default]; })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [CreateDiveInput_1.default, Array]),
         __metadata("design:returntype", Promise)
     ], DiveResolver.prototype, "createDive", null);
+    __decorate([
+        type_graphql_1.Mutation(function () { return String; }),
+        __param(0, type_graphql_1.Arg('id')),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String]),
+        __metadata("design:returntype", Promise)
+    ], DiveResolver.prototype, "deleteDiveById", null);
     DiveResolver = __decorate([
         type_graphql_1.Resolver()
     ], DiveResolver);
